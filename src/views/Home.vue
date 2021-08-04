@@ -1,28 +1,18 @@
 <template>
-  <div>
-    <h1>{{JSON.stringify(user.profile)}}</h1>
+  <div class="home">
+    <img alt="Vue logo" src="../assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
 <script>
-import authService from '../services/auth';
+// @ is an alias to /src
+import HelloWorld from '@/components/HelloWorld.vue';
 
 export default {
-  data() {
-    return {
-      user: {},
-    };
-  },
-  beforeMount() {
-    const fetchUserInfo = async () => {
-      const user = await authService.instance().getUser();
-      this.user = user;
-    };
-    fetchUserInfo();
+  name: 'Home',
+  components: {
+    HelloWorld,
   },
 };
 </script>
-
-<style scoped>
-
-</style>

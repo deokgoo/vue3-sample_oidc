@@ -1,31 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import authService from '../services/auth';
 import Home from '../views/Home.vue';
-import Login from '../views/Login.vue';
-import Callback from '../views/Callback.vue';
-import Logout from '../views/Logout.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/user',
+    name: 'User',
     meta: { requiresAuth: true },
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-  },
-  {
-    path: '/callback',
-    name: 'Callback',
-    component: Callback,
-  },
-  {
-    path: '/logout',
-    name: 'Logout',
-    component: Logout,
+    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
 ];
 
@@ -35,15 +21,15 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const guardFilter = async () => {
-    const user = await authService.instance().getUser();
-    if (to.meta?.requiresAuth && !user) {
-      next('/login');
+  if (to.matched.some((x) => x.meta.requiresAuth)) {
+    if (!auth.loggedIn) {
+      // move to login
     } else {
       next();
     }
-  };
-  guardFilter();
+  } else {
+    next();
+  }
 });
 
 export default router;
