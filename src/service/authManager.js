@@ -1,6 +1,8 @@
 import Oidc from 'oidc-client';
 import 'babel-polyfill';
 
+const { AUTH_SERVER } = process.env;
+
 const userManager = new Oidc.UserManager({
   userStore: new Oidc.WebStorageStateStore(),
   authority: 'https://localhost:44321',

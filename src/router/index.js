@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
+import { getUser } from '../service/securityService';
 
 const routes = [
   {
@@ -20,12 +21,12 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (to.matched.some((x) => x.meta.requiresAuth)) {
-    if (!auth.loggedIn) {
-      // move to login
-    } else {
+    if (await getUser()) {
       next();
+    } else {
+      console.log('not Login');
     }
   } else {
     next();
