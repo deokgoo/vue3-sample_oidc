@@ -1,17 +1,21 @@
 import Oidc from 'oidc-client';
 import 'babel-polyfill';
 
-const { AUTH_SERVER } = process.env;
+const { VUE_APP_AUTH_SERVER, VUE_APP_SERVER } = process.env;
+
+console.log(VUE_APP_AUTH_SERVER);
 
 const userManager = new Oidc.UserManager({
   userStore: new Oidc.WebStorageStateStore(),
-  authority: 'https://localhost:44321',
-  client_id: 'vuejsclient',
-  redirect_uri: window.location.origin + '/static/callback.html',
-  response_type: 'id_token token',
-  scope: 'openid profile address roles identityserver4api country subscriptionlevel offline_access',
-  post_logout_redirect_uri: window.location.origin + '/index.html',
-  silent_redirect_uri: window.location.origin + '/static/silent-renew.html',
+  authority: VUE_APP_AUTH_SERVER,
+  client_id: 'interactive.public',
+  response_type: 'code',
+  scope: 'openid profile email api offline_access',
+  // reirectUri
+  redirect_uri: `${VUE_APP_SERVER}/callback.html`,
+  post_logout_redirect_uri: `${VUE_APP_SERVER}/logout.html`,
+  silent_redirect_uri: `${VUE_APP_SERVER}/static/silent-renew.html`,
+  // options
   accessTokenExpiringNotificationTime: 10,
   automaticSilentRenew: true,
   filterProtocolClaims: true,

@@ -1,30 +1,45 @@
 <template>
-  <div class="home"
+  <div class="user"
        :style="{'background-image': `url(${require('../assets/bg.jpeg')})`}">
     <div class="home__container">
       <div class="home__wrapper">
         <h1>Oidc Example</h1>
-        <button @click="login">Login</button>
+        {{JSON.stringify(user)}}
+        <button @click="login">SignOut</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { signIn } from '../service/securityService';
+import { getUser, signOut } from '../service/securityService';
 
 export default {
-  name: 'Home',
+  name: 'User',
+  data() {
+    return {
+      user: null,
+    };
+  },
   methods: {
-    async login() {
-      await signIn();
+    async getUser() {
+      const user = await getUser();
+      return user;
     },
+    async signOutHandler() {
+      await signOut();
+    },
+  },
+  created() {
+    (async () => {
+      this.user = await getUser();
+    })();
   },
 };
 </script>
 
 <style>
-.home {
+.user {
   width: 100vw;
   height: 100vh;
   padding: 0;
@@ -49,6 +64,9 @@ export default {
   box-sizing: border-box;
   background-color: white;
   border-radius: 12px;
+  white-space: pre-line;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .home__wrapper>button {
   width: 200px;
