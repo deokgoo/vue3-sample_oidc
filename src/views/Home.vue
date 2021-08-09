@@ -1,62 +1,39 @@
 <template>
-  <div class="home"
-       :style="{'background-image': `url(${require('../assets/bg.jpeg')})`}">
-    <div class="home__container">
-      <div class="home__wrapper">
+  <div class="home">
+    <default-layout>
+      <template v-slot:content>
         <h1>Oidc Example</h1>
-        <button @click="login">Login</button>
-      </div>
-    </div>
+        <button class="btn_signin" @click="signInHandler">SignIn</button>
+      </template>
+    </default-layout>
   </div>
 </template>
 
 <script>
+import DefaultLayout from '../components/DefaultLayout.vue';
 import { signIn } from '../service/securityService';
 
 export default {
   name: 'Home',
+  components: {
+    DefaultLayout,
+  },
   methods: {
-    async login() {
+    async signInHandler() {
       await signIn();
     },
   },
 };
 </script>
 
-<style>
-.home {
-  width: 100vw;
-  height: 100vh;
-  padding: 0;
-  margin: 0;
-  background-repeat: no-repeat;
-  background-size: 100vw 100vh;
-}
-.home__container {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.home__wrapper {
-  height: 800px;
-  width: 550px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  background-color: white;
-  border-radius: 12px;
-}
-.home__wrapper>button {
-  width: 200px;
+<style scoped>
+.btn_signin {
+  width: 150px;
   margin-top: 25px;
   background-color: rgb(203, 169, 220);
   color: white;
   border: none;
-  padding: 16px;
+  padding: 12px 16px;
   border-radius: 12px;
   font-size: 1.2rem;
   cursor: pointer;

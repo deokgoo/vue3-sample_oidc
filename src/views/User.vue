@@ -1,82 +1,71 @@
 <template>
-  <div class="user"
-       :style="{'background-image': `url(${require('../assets/bg.jpeg')})`}">
-    <div class="home__container">
-      <div class="home__wrapper">
-        <h1>Oidc Example</h1>
-        {{JSON.stringify(user)}}
-        <button @click="login">SignOut</button>
-      </div>
-    </div>
+  <div class="user">
+    <default-layout>
+      <template v-slot:content>
+        <h1 class="user__title">Oidc Example</h1>
+        <div class="user__info">
+          <p><b>profile:</b> {{user?.profile}}</p>
+          <p><b>scope:</b> {{user?.scope}}</p>
+          <p><b>token_type:</b> {{user?.token_type}}</p>
+          <p><b>id_token</b>: {{user?.id_token}}</p>
+          <p><b>access_token:</b> {{user?.access_token}}</p>
+          <p><b>refresh_token:</b> {{user?.refresh_token}}</p>
+          <p><b>session_state:</b> {{user?.session_state}}</p>
+        </div>
+      </template>
+      <template v-slot:footer>
+
+      </template>
+    </default-layout>
   </div>
 </template>
 
 <script>
-import { getUser, signOut } from '../service/securityService';
+import DefaultLayout from '../components/DefaultLayout.vue';
+import { signOut, getUser } from '../service/securityService';
 
 export default {
   name: 'User',
+  components: {
+    DefaultLayout,
+  },
   data() {
     return {
       user: null,
     };
   },
+  created() {
+    this.userDataFetch();
+  },
   methods: {
-    async getUser() {
-      const user = await getUser();
-      return user;
-    },
     async signOutHandler() {
       await signOut();
     },
-  },
-  created() {
-    (async () => {
-      this.user = await getUser();
-    })();
+    async userDataFetch() {
+      try {
+        const user = await getUser();
+        this.user = user;
+        console.log(this.user);
+      } catch (err) {
+        console.warn(err);
+      }
+    },
   },
 };
 </script>
 
-<style>
-.user {
-  width: 100vw;
-  height: 100vh;
-  padding: 0;
-  margin: 0;
-  background-repeat: no-repeat;
-  background-size: 100vw 100vh;
-}
-.home__container {
-  height: 100%;
+<style scoped>
+.user__title {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
 }
-.home__wrapper {
-  height: 800px;
-  width: 550px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  background-color: white;
-  border-radius: 12px;
-  white-space: pre-line;
-  overflow: hidden;
+.user__info {
+  width: 100%;
+}
+.user__info>p {
+  width: 100%;
+  white-space: pre-wrap;
   text-overflow: ellipsis;
-}
-.home__wrapper>button {
-  width: 200px;
-  margin-top: 25px;
-  background-color: rgb(203, 169, 220);
-  color: white;
-  border: none;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 1.2rem;
-  cursor: pointer;
+  word-wrap: break-word;
 }
 </style>
